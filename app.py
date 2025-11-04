@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import os  # <<< NEW: Import the OS library
 
 # --- 1. Page Configuration ---
 st.set_page_config(
@@ -68,23 +69,34 @@ def local_css():
 
 local_css()
 
-# --- 3. Load Saved Model Assets ---
+# --- 3. Load Saved Model Assets (FIXED!) ---
+
+# --- NEW: Build Absolute Paths to Files ---
+# This forces the app to find files in its OWN directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FILE_TFIDF = os.path.join(BASE_DIR, 'tfidf_vectorizer.pkl')
+FILE_COSINE = os.path.join(BASE_DIR, 'cosine_similarity.npy')
+FILE_DF = os.path.join(BASE_DIR, 'main_dataframe.pkl')
+FILE_INDICES = os.path.join(BASE_DIR, 'indices.pkl')
+# --- END NEW PATHS ---
+
 @st.cache_data
 def load_data():
     """Loads all the pre-computed model files."""
     try:
-        tfidf = joblib.load('tfidf_vectorizer.pkl')
-        cosine_sim = np.load('cosine_similarity.npy')
-        df = pd.read_pickle('main_dataframe.pkl')
-        indices = pd.read_pickle('indices.pkl')
+        # Load using the new absolute paths
+        tfidf = joblib.load(FILE_TFIDF)
+        cosine_sim = np.load(FILE_COSINE)
+        df = pd.read_pickle(FILE_DF)
+        indices = pd.read_pickle(FILE_INDICES)
         return tfidf, cosine_sim, df, indices
-    except FileNotFoundError:
-        st.error("Model files not found. Please run the Colab build script (V2) and add files to this folder.")
+    except FileNotFoundError as e:
+        st.error(f"Error: Model files not found. The app is looking for a file that isn't in your GitHub repository. Please double-check all 4 model file names. Missing file: {e.filename}")
         return None, None, None, None
 
 tfidf, cosine_sim, df, indices = load_data()
 
-# --- 4. The Recommendation Function (with duplicate title fix) ---
+# --- 4. The Recommendation Function ---
 def get_recommendations(title, target_type='all', top_n=5):
     """
     Finds the most similar items based on title and target type.
@@ -92,10 +104,10 @@ def get_recommendations(title, target_type='all', top_n=5):
     if title not in indices:
         return pd.DataFrame(columns=['title', 'creator', 'type', 'similarity'])
 
-    idx = indices[title] # This might return a Series if titles are duplicated
+    idx = indices[title]
     
     if isinstance(idx, pd.Series):
-        idx = idx.iloc[0] # Use the first matching index
+        idx = idx.iloc[0]
 
     sim_scores = list(enumerate(cosine_sim[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
@@ -135,8 +147,6 @@ if df is not None:
     st.subheader("Find a book that matches your favorite song, or a song that matches your favorite book.")
     st.divider() 
 
-    # --- NEW INPUT LOGIC (Separate Dropdowns) ---
-    
     # Prepare the separate title lists
     book_titles = sorted(df[df['type'] == 'book']['title'].unique())
     song_titles = sorted(df[df['type'] == 'song']['title'].unique())
@@ -160,9 +170,7 @@ if df is not None:
             index=None 
         )
     
-    # --- End of New Input Logic ---
-    
-    st.write("") # Add a little space
+    st.write("") 
     
     target_type = st.radio(
         "What do you want recommendations for?",
@@ -173,7 +181,6 @@ if df is not None:
 
     if st.button("Find My Vibe"):
         
-        # --- NEW LOGIC TO HANDLE 2 INPUTS ---
         selected_title = None
         if selected_book and selected_song:
             st.warning("Please choose only ONE title (a book OR a song). Clear the other selection to continue.")
@@ -183,7 +190,6 @@ if df is not None:
             selected_title = selected_song
         else:
             st.warning("Please select a title first!")
-        # --- END NEW LOGIC ---
 
         if selected_title:
             if selected_title not in indices:
@@ -196,7 +202,6 @@ if df is not None:
                      st.header(f"Because you like '{selected_title}'...")
                 st.write("") 
 
-                # --- NEW OUTPUT LOGIC (Separate Columns) ---
                 target = target_type.lower()
                 
                 if target == 'all':
