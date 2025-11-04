@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import os  # <<< NEW: Import the OS library
+import os
 
 # --- 1. Page Configuration ---
 st.set_page_config(
@@ -69,22 +69,19 @@ def local_css():
 
 local_css()
 
-# --- 3. Load Saved Model Assets (FIXED!) ---
+# --- 3. Load Saved Model Assets ---
 
-# --- NEW: Build Absolute Paths to Files ---
-# This forces the app to find files in its OWN directory
+# --- Build Absolute Paths to Files ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FILE_TFIDF = os.path.join(BASE_DIR, 'tfidf_vectorizer.pkl')
 FILE_COSINE = os.path.join(BASE_DIR, 'cosine_similarity.npy')
 FILE_DF = os.path.join(BASE_DIR, 'main_dataframe.pkl')
 FILE_INDICES = os.path.join(BASE_DIR, 'indices.pkl')
-# --- END NEW PATHS ---
 
 @st.cache_data
 def load_data():
     """Loads all the pre-computed model files."""
     try:
-        # Load using the new absolute paths
         tfidf = joblib.load(FILE_TFIDF)
         cosine_sim = np.load(FILE_COSINE)
         df = pd.read_pickle(FILE_DF)
@@ -96,7 +93,7 @@ def load_data():
 
 tfidf, cosine_sim, df, indices = load_data()
 
-# --- 4. The Recommendation Function ---
+# --- 4. The Recommendation Function (FIXED!) ---
 def get_recommendations(title, target_type='all', top_n=5):
     """
     Finds the most similar items based on title and target type.
@@ -118,7 +115,10 @@ def get_recommendations(title, target_type='all', top_n=5):
             continue
         item_type = df.iloc[i]['type']
         
-        if (target_type == 'all' or item_type == target_type) and score > 0.01:
+        # --- THIS IS THE FIX ---
+        # We lowered the threshold from 0.01 to 0.0 (Show ANY match)
+        # This will show even the weakest 0.1% matches (which show as 0%)
+        if (target_type == 'all' or item_type == target_type) and score >= 0: # Changed from > 0.01
             recommended_items.append({
                 'title': df.iloc[i]['title'],
                 'creator': df.iloc[i]['creator'].title(),
@@ -137,6 +137,7 @@ def display_recommendation(row):
     icon = "📚" if row['type'] == 'book' else "🎧"
     with st.container(border=True):
         st.write(f"**{icon} {row['title']}** by {row['creator']}")
+        # We will show 0% for very weak matches, which is fine
         st.progress(float(row['similarity']), text=f"Match: {row['similarity']:.0%}")
     st.write("")
 
