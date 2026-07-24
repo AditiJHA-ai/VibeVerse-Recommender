@@ -11,6 +11,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from backend.enrichment import enrich
@@ -18,13 +20,18 @@ from backend.recommender import get_recommender
 from backend.vibe_taxonomy import VIBES
 
 ROOT = Path(__file__).resolve().parents[1]
+FRONTEND_DIST = ROOT / "frontend" / "dist"
 load_dotenv(ROOT / ".env", override=True)
 
 app = FastAPI(title="VibeVerse API", version="2.0.0")
 
+_cors = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173",
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(","),
+    allow_origins=[o.strip() for o in _cors.split(",") if o.strip()] or ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -277,14 +284,31 @@ async def recommend(body: RecommendRequest):
     return result
 
 
+# Serve the built React app in production (same origin as /api).
+if FRONTEND_DIST.is_dir():
+    assets_dir = FRONTEND_DIST / "assets"
+    if assets_dir.is_dir():
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def spa_fallback(full_path: str):
+        # Never shadow API routes (already registered above).
+        if full_path.startswith("api"):
+            raise HTTPException(status_code=404, detail="Not found")
+        candidate = FRONTEND_DIST / full_path
+        if full_path and candidate.is_file():
+            return FileResponse(candidate)
+        return FileResponse(FRONTEND_DIST / "index.html")
+
+
 def main():
     import uvicorn
 
     uvicorn.run(
         "backend.api:app",
-        host=os.getenv("HOST", "127.0.0.1"),
+        host=os.getenv("HOST", "0.0.0.0"),
         port=int(os.getenv("PORT", "8000")),
-        reload=True,
+        reload=os.getenv("RELOAD", "0") == "1",
     )
 
 

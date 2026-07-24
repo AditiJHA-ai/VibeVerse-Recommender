@@ -1,17 +1,28 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Atmosphere from './components/Atmosphere'
 import Landing from './pages/Landing'
 import Explore from './pages/Explore'
 import './index.css'
 
-export default function App() {
+function Shell() {
+  const { pathname } = useLocation()
+  const isExplore = pathname.startsWith('/explore')
+
   return (
-    <BrowserRouter>
-      <Atmosphere />
+    <>
+      {isExplore ? <Atmosphere /> : null}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/explore" element={<Explore />} />
       </Routes>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Shell />
     </BrowserRouter>
   )
 }

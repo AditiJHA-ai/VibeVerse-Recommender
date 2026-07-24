@@ -1,0 +1,13 @@
+.env
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+frontend/node_modules
+frontend/dist
+.git
+agent-transcripts
+*.md
+tests
+scripts

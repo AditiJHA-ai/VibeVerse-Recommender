@@ -117,7 +117,7 @@ export default function Explore() {
   const blurb = shorten(result?.description || '')
 
   return (
-    <div className="site-shell">
+    <div className="site-shell explore">
       <Nav />
 
       <header className="explore-hero">
