@@ -1,0 +1,24 @@
+{
+  "n_items": 2659,
+  "n_books": 1250,
+  "n_songs": 1409,
+  "vibes": [
+    "intimate",
+    "electric",
+    "dreamy",
+    "epic",
+    "melancholy",
+    "euphoric",
+    "cozy",
+    "intense",
+    "nostalgic",
+    "romantic",
+    "rebellious",
+    "chill",
+    "dark",
+    "whimsical",
+    "adventurous",
+    "contemplative"
+  ],
+  "catalog": "catalog.parquet"
+}

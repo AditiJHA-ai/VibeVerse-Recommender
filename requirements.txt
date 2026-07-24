@@ -1,5 +1,13 @@
-streamlit
+fastapi
+uvicorn[standard]
+httpx
+python-dotenv
+pydantic
 pandas
 numpy
 scikit-learn
 joblib
+pyarrow
+streamlit
+pytest
+pytest-asyncio
