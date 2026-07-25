@@ -5,11 +5,44 @@ import twoQuestions from '../assets/gamma/two-questions.jpg'
 import vibeWheel from '../assets/gamma/vibe-wheel.jpg'
 import crossDomain from '../assets/gamma/cross-domain.jpg'
 import readyExplore from '../assets/gamma/ready-explore.jpg'
+import pairingsBg from '../assets/gamma/pairings-bg.jpg'
+
+const PAIRINGS = [
+  {
+    title: 'The Great Gatsby',
+    body: (
+      <>
+        <strong>Book Vibe:</strong> Jazz-age glamour with melancholy undertones.{' '}
+        <strong>Music Match:</strong> Lana Del Rey&apos;s atmospheric, nostalgic pop sensibility
+        captures the same bittersweet longing.
+      </>
+    ),
+  },
+  {
+    title: 'Midnight by Taylor Swift',
+    body: (
+      <>
+        <strong>Song Vibe:</strong> Introspective late-night reflections layered with pop
+        production. <strong>Book Match:</strong> The poetic intimacy and emotional depth of Sally
+        Rooney&apos;s <em>Normal People</em>.
+      </>
+    ),
+  },
+  {
+    title: 'Dune by Frank Herbert',
+    body: (
+      <>
+        <strong>Book Vibe:</strong> Epic, expansive world-building with orchestral grandeur.{' '}
+        <strong>Music Match:</strong> Hans Zimmer&apos;s sweeping, atmospheric film scores echo
+        the same sense of wonder and scale.
+      </>
+    ),
+  },
+]
 
 export default function Landing() {
   return (
     <div className="gamma">
-      {/* Hero */}
       <section className="g-section g-hero">
         <div className="g-wrap g-split">
           <div className="g-copy">
@@ -23,15 +56,14 @@ export default function Landing() {
               Explore Vibes
             </Link>
           </div>
-          <div className="g-art">
+          <figure className="g-art">
             <img src={heroBooks} alt="Floating books and musical notes" />
-          </div>
+          </figure>
         </div>
       </section>
 
-      {/* What's Your Vibe? */}
-      <section className="g-section">
-        <div className="g-wrap g-narrow">
+      <section className="g-section g-section-tight">
+        <div className="g-wrap g-text-block">
           <h2>What&apos;s Your Vibe?</h2>
           <p>
             VibeVerse reimagines how we discover content by asking a delightfully simple question:{' '}
@@ -43,9 +75,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Two Questions */}
       <section className="g-section">
-        <div className="g-wrap g-split g-split-top">
+        <div className="g-wrap g-split g-split-start">
           <div className="g-copy">
             <h2>Two Questions, Infinite Possibilities</h2>
             <div className="g-mode-stack">
@@ -75,13 +106,12 @@ export default function Landing() {
               </div>
             </div>
           </div>
-          <div className="g-art">
+          <figure className="g-art">
             <img src={twoQuestions} alt="Cosmic book with swirling musical notes" />
-          </div>
+          </figure>
         </div>
       </section>
 
-      {/* How the Magic Happens */}
       <section className="g-section g-band-blue" id="how">
         <div className="g-wrap">
           <h2>How the Magic Happens</h2>
@@ -119,7 +149,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Vibe Categories */}
       <section className="g-section">
         <div className="g-wrap">
           <h2>Vibe Categories</h2>
@@ -150,10 +179,9 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Cross-Domain Discovery */}
       <section className="g-section">
         <div className="g-wrap g-split">
-          <div className="g-copy">
+          <div className="g-copy g-copy-short">
             <h2>Cross-Domain Discovery</h2>
             <p>
               Stop siloing your entertainment. Whether you&apos;re a bookworm curious about new
@@ -161,13 +189,33 @@ export default function Landing() {
               discovery you didn&apos;t know existed.
             </p>
           </div>
-          <div className="g-art">
+          <figure className="g-art g-art-wide">
             <img src={crossDomain} alt="Futuristic library and music stage" />
+          </figure>
+        </div>
+      </section>
+
+      <section className="g-section g-pairings">
+        <div className="g-pairings-bg" style={{ backgroundImage: `url(${pairingsBg})` }} />
+        <div className="g-wrap">
+          <div className="g-pairings-panel">
+            <h2>Try These Pairings</h2>
+            <p className="g-pairings-lead">
+              Curious what VibeVerse might reveal? Here are real examples of how books and songs
+              connect across the vibe spectrum:
+            </p>
+            <div className="g-pairings-grid">
+              {PAIRINGS.map((item) => (
+                <article key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Why Cross-Media Matters */}
       <section className="g-section">
         <div className="g-wrap">
           <h2>Why Cross-Media Matters</h2>
@@ -201,7 +249,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Ready to Explore */}
       <section className="g-section g-band-sky">
         <div className="g-wrap g-split">
           <div className="g-copy">
@@ -214,22 +261,23 @@ export default function Landing() {
             <ul className="g-bullets">
               <li>Search by title or artist</li>
               <li>Explore personalized recommendations</li>
+              <li>Discover hidden gems across media</li>
             </ul>
-            <Link className="g-btn g-btn-dark" to="/explore">
+            <Link className="g-btn" to="/explore">
               Explore Vibes
             </Link>
           </div>
-          <div className="g-art">
+          <figure className="g-art g-art-wide">
             <img src={readyExplore} alt="Person exploring recommendations on a phone" />
-          </div>
+          </figure>
         </div>
       </section>
 
       <footer className="g-footer">
         <div className="g-wrap">
           <p>
-            Where every song has a story. Where every book has a soundtrack. Where discovery knows
-            no boundaries.
+            VibeVerse: Where every song has a story. Where every book has a soundtrack. Where
+            discovery knows no boundaries.
           </p>
         </div>
       </footer>
