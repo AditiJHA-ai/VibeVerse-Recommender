@@ -19,7 +19,7 @@ const PAIRINGS = [
     ),
   },
   {
-    title: 'Midnight by Taylor Swift',
+    title: 'Midnights by Taylor Swift',
     body: (
       <>
         <strong>Song Vibe:</strong> Introspective late-night reflections layered with pop
@@ -263,9 +263,6 @@ export default function Landing() {
               <li>Explore personalized recommendations</li>
               <li>Discover hidden gems across media</li>
             </ul>
-            <Link className="g-btn" to="/explore">
-              Explore Vibes
-            </Link>
           </div>
           <figure className="g-art g-art-wide">
             <img src={readyExplore} alt="Person exploring recommendations on a phone" />

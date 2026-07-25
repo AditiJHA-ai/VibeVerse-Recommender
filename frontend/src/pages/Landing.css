@@ -1,24 +1,29 @@
+/* Gamma-matched type + color system */
 .gamma {
-  --g-ink: #3d3d3d;
-  --g-muted: #666666;
-  --g-soft: #7a7a7a;
-  --g-rose: #d8a8b0;
-  --g-rose-deep: #c9959e;
-  --g-blue: #b4c9ff;
-  --g-sky: #9fd4fc;
-  --g-blush: #f3e8ec;
-  --g-dot: #edd4d4;
-  --g-line: rgba(60, 60, 70, 0.14);
+  --g-heading: #5a5a5a;
+  --g-body: #8a8a8a;
+  --g-body-strong: #5f5f5f;
+  --g-rose: #b87b86;
+  --g-rose-hover: #a66c77;
+  --g-blush: #f0e6eb;
+  --g-blue: #adc6ff;
+  --g-sky: #a8d4f7;
+  --g-dot: #e8d0d0;
+  --g-card-line: #e3e6eb;
   --g-display: "Playfair Display", Georgia, "Times New Roman", serif;
-  --g-body: "Source Sans 3", "Segoe UI", sans-serif;
-  background: #fff;
-  color: var(--g-ink);
-  font-family: var(--g-body);
+  --g-sans: "Nunito Sans", "Segoe UI", sans-serif;
+
+  background: #ffffff;
+  color: var(--g-body);
+  font-family: var(--g-sans);
   font-weight: 400;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
   min-height: 100vh;
   position: relative;
   z-index: 1;
+  -webkit-font-smoothing: antialiased;
 }
 
 .gamma h1,
@@ -26,20 +31,22 @@
 .gamma h3 {
   font-family: var(--g-display);
   font-weight: 500;
-  color: #505050;
-  letter-spacing: -0.015em;
+  color: var(--g-heading);
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
 .gamma p {
   margin: 0;
-  color: var(--g-muted);
-  font-size: 1.02rem;
+  color: var(--g-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
 }
 
 .gamma strong {
-  color: var(--g-ink);
-  font-weight: 600;
+  color: var(--g-body-strong);
+  font-weight: 700;
 }
 
 .gamma em {
@@ -47,130 +54,146 @@
 }
 
 .g-wrap {
-  width: min(1040px, calc(100% - 4rem));
+  width: min(920px, calc(100% - 3.5rem));
   margin: 0 auto;
 }
 
 .g-section {
-  padding: 4.25rem 0;
+  padding: 3.75rem 0;
   background: #fff;
 }
 
 .g-section-tight {
-  padding: 3.25rem 0;
+  padding: 2.75rem 0 3rem;
 }
 
 .g-hero {
-  padding-top: 4.5rem;
-  padding-bottom: 3.5rem;
+  padding: 4.5rem 0 3.25rem;
 }
 
 .g-band-blue {
   background: var(--g-blue);
+  padding: 3.75rem 0 4rem;
 }
 
 .g-band-blue h2,
 .g-band-blue h3,
 .g-band-blue .g-step-num {
-  color: #333;
+  color: #4a4a4a;
 }
 
 .g-band-blue p {
-  color: #3a3a3a;
+  color: #5a5a5a;
 }
 
 .g-band-sky {
   background: var(--g-sky);
+  padding: 3.75rem 0 4rem;
 }
 
 .g-band-sky h2,
 .g-band-sky h3 {
-  color: #1a1a1a;
+  color: #3f3f3f;
 }
 
 .g-band-sky p,
 .g-band-sky li {
-  color: #222;
+  color: #4a4a4a;
 }
 
 .g-split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
-  gap: clamp(1.75rem, 4vw, 3.25rem);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 2.75rem;
   align-items: center;
 }
 
 .g-split-start {
   align-items: start;
+  gap: 2.5rem;
 }
 
 .g-text-block {
-  max-width: 680px;
-}
-
-.g-text-block p {
-  max-width: 62ch;
+  max-width: 560px;
 }
 
 .g-copy-short {
-  max-width: 28rem;
+  max-width: 22rem;
 }
 
+.g-copy-short p {
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+/* ---- Type scale ---- */
 .g-brand {
-  font-size: clamp(3.2rem, 6.5vw, 4.75rem);
-  line-height: 1.05;
-  color: #4f4f4f;
-  margin-bottom: 1.1rem;
+  font-size: clamp(3.6rem, 7.5vw, 5rem);
+  line-height: 1.02;
+  font-weight: 500;
+  color: #555555;
+  margin-bottom: 1rem;
 }
 
 .g-lede {
-  max-width: 32rem;
-  margin-bottom: 1.5rem !important;
-  font-size: 1.05rem;
-  color: var(--g-soft);
-  line-height: 1.65;
+  max-width: 28rem;
+  margin-bottom: 1.35rem !important;
+  font-size: 14.5px;
+  color: #939393;
+  line-height: 1.7;
+  font-weight: 400;
 }
 
 .gamma h2 {
-  font-size: clamp(1.85rem, 3.4vw, 2.55rem);
-  line-height: 1.18;
-  margin-bottom: 0.85rem;
+  font-size: clamp(1.7rem, 3.2vw, 2.15rem);
+  line-height: 1.2;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: #555555;
 }
 
 .g-subhead {
-  font-size: clamp(1.25rem, 2.2vw, 1.55rem);
-  margin: 0.2rem 0 0.85rem !important;
-  color: #2a2a2a;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 500;
+  margin: 0.15rem 0 0.75rem !important;
+  color: #4a4a4a;
 }
 
 .g-intro {
-  max-width: 48rem;
-  margin-bottom: 2rem !important;
+  max-width: 40rem;
+  margin-bottom: 1.75rem !important;
+  font-size: 14.5px;
+  color: #6e6e6e;
 }
 
 .g-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.78rem 1.4rem;
-  border-radius: 0.7rem;
+  padding: 0.62rem 1.15rem;
+  border-radius: 0.55rem;
   background: var(--g-rose);
-  color: #2f2f2f;
+  color: #ffffff;
+  font-family: var(--g-sans);
   font-weight: 600;
-  font-size: 0.98rem;
+  font-size: 13.5px;
+  letter-spacing: 0.01em;
   border: none;
-  transition: transform 0.22s ease, background 0.22s ease;
+  box-shadow: none;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .g-btn:hover {
-  background: var(--g-rose-deep);
+  background: var(--g-rose-hover);
   transform: translateY(-1px);
+  color: #fff;
 }
 
+/* ---- Art ---- */
 .g-art {
   margin: 0;
   width: 100%;
-  max-width: 460px;
+  max-width: 380px;
   justify-self: end;
 }
 
@@ -178,101 +201,112 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 1.35rem;
+  border-radius: 1.15rem;
   display: block;
-  background: #f3f5f8;
+  background: #f4f6f9;
 }
 
 .g-art-wide {
-  max-width: 500px;
+  max-width: 420px;
 }
 
 .g-art-wide img {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 5 / 4;
 }
 
+/* ---- Mode stack ---- */
 .g-mode-stack {
-  margin-top: 1.35rem;
+  margin-top: 1.15rem;
   background: var(--g-blush);
-  border-radius: 1.1rem;
+  border-radius: 1rem;
   overflow: hidden;
-  max-width: 34rem;
+  max-width: 29rem;
 }
 
 .g-mode-row {
   display: grid;
-  grid-template-columns: 1.6rem 1fr;
-  gap: 0.85rem;
-  padding: 1.2rem 1.25rem;
+  grid-template-columns: 1.35rem 1fr;
+  gap: 0.7rem;
+  padding: 1.05rem 1.15rem;
   align-items: start;
 }
 
 .g-mode-row + .g-mode-row {
-  border-top: 1px solid rgba(90, 70, 80, 0.12);
+  border-top: 1px solid rgba(120, 90, 100, 0.12);
 }
 
 .g-mode-icon {
-  font-size: 1.25rem;
-  line-height: 1.3;
+  font-size: 1.05rem;
+  line-height: 1.35;
 }
 
 .g-mode-row h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.3rem;
-  color: #404040;
+  font-family: var(--g-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #4f4f4f;
+  letter-spacing: -0.01em;
 }
 
 .g-mode-row p {
-  font-size: 0.95rem;
+  font-size: 13.5px;
   line-height: 1.55;
-  color: var(--g-muted);
+  color: #7a7a7a;
 }
 
+/* ---- Steps ---- */
 .g-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.75rem 2rem;
-  margin-top: 0.35rem;
-  padding-top: 1.35rem;
-  border-top: 1px solid rgba(40, 40, 60, 0.16);
+  gap: 1.5rem 1.75rem;
+  margin-top: 0.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(50, 50, 70, 0.14);
 }
 
 .g-step-num {
   font-family: var(--g-display);
-  font-size: 1rem;
-  margin-bottom: 0.7rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid rgba(40, 40, 60, 0.16);
-  width: 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(50, 50, 70, 0.14);
+  width: 1.75rem;
 }
 
 .g-steps h3 {
-  font-size: 1.28rem;
-  margin-bottom: 0.45rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
   line-height: 1.25;
+  color: #4a4a4a;
 }
 
 .g-steps p {
-  font-size: 0.95rem;
+  font-size: 13.5px;
   line-height: 1.55;
+  color: #5f5f5f;
 }
 
+/* ---- Vibe ring ---- */
 .g-vibe-ring {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(200px, 280px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 240px) minmax(0, 1fr);
   grid-template-rows: auto auto;
-  column-gap: 1.5rem;
-  row-gap: 2rem;
+  column-gap: 1.25rem;
+  row-gap: 1.75rem;
   align-items: center;
-  margin: 2.25rem auto 0;
-  max-width: 900px;
+  margin: 2rem auto 0;
+  max-width: 780px;
 }
 
 .g-wheel {
   grid-column: 2;
   grid-row: 1 / span 2;
   width: 100%;
-  max-width: 280px;
+  max-width: 240px;
   aspect-ratio: 1;
   object-fit: cover;
   justify-self: center;
@@ -280,14 +314,17 @@
 }
 
 .g-vibe-label h3 {
-  font-size: 1.3rem;
-  margin-bottom: 0.2rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+  color: #555;
 }
 
 .g-vibe-label p {
-  font-size: 0.92rem;
-  max-width: 14.5rem;
+  font-size: 13px;
+  max-width: 12.5rem;
   line-height: 1.45;
+  color: #8a8a8a;
 }
 
 .g-vibe-tl {
@@ -320,11 +357,12 @@
   align-self: start;
 }
 
+/* ---- Pairings ---- */
 .g-pairings {
   position: relative;
-  padding: 5rem 0;
+  padding: 4.5rem 0;
   overflow: hidden;
-  background: #c9dff5;
+  background: #c5ddf2;
 }
 
 .g-pairings-bg {
@@ -332,114 +370,124 @@
   inset: 0;
   background-size: cover;
   background-position: center;
-  opacity: 0.92;
+  opacity: 0.95;
 }
 
 .g-pairings .g-wrap {
   position: relative;
   z-index: 1;
+  width: min(860px, calc(100% - 3.5rem));
 }
 
 .g-pairings-panel {
   background: #fff;
-  border-radius: 1.5rem;
-  padding: clamp(1.75rem, 3.5vw, 2.75rem);
-  box-shadow: 0 18px 50px rgba(40, 70, 110, 0.12);
+  border-radius: 1.35rem;
+  padding: 2rem 1.75rem 1.75rem;
+  box-shadow: 0 12px 36px rgba(50, 80, 120, 0.1);
 }
 
 .g-pairings-panel h2 {
   text-align: center;
-  margin-bottom: 0.65rem;
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+  margin-bottom: 0.55rem;
 }
 
 .g-pairings-lead {
   text-align: center;
-  max-width: 44rem;
-  margin: 0 auto 1.75rem !important;
-  font-size: 0.98rem;
-  color: var(--g-soft);
+  max-width: 36rem;
+  margin: 0 auto 1.4rem !important;
+  font-size: 13.5px;
+  color: #909090;
 }
 
 .g-pairings-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .g-pairings-grid article {
-  border: 1px solid #d9dde3;
-  border-radius: 0.95rem;
-  padding: 1.15rem 1.1rem 1.25rem;
+  border: 1px solid var(--g-card-line);
+  border-radius: 0.8rem;
+  padding: 1rem 0.95rem 1.1rem;
   background: #fff;
-  min-height: 100%;
 }
 
 .g-pairings-grid h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.55rem;
-  color: #454545;
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.45rem;
+  color: #555;
   line-height: 1.25;
 }
 
 .g-pairings-grid p {
-  font-size: 0.9rem;
+  font-size: 12.5px;
   line-height: 1.55;
-  color: var(--g-muted);
+  color: #808080;
 }
 
+/* ---- Reasons ---- */
 .g-reasons {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.75rem 2rem;
-  margin-top: 1.75rem;
+  gap: 1.5rem 1.75rem;
+  margin-top: 1.5rem;
 }
 
 .g-dot {
   display: block;
-  width: 1rem;
-  height: 1rem;
+  width: 0.85rem;
+  height: 0.85rem;
   border-radius: 50%;
   background: var(--g-dot);
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
 .g-reasons h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.55rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.45rem;
   line-height: 1.25;
-  max-width: 14ch;
+  max-width: 13ch;
+  color: #555;
 }
 
 .g-reasons p {
-  font-size: 0.95rem;
+  font-size: 13.5px;
   line-height: 1.55;
+  color: #808080;
 }
 
 .g-bullets {
-  margin: 1rem 0 1.35rem;
-  padding: 0 0 0 1.1rem;
+  margin: 0.85rem 0 0;
+  padding: 0 0 0 1.05rem;
 }
 
 .g-bullets li {
-  margin: 0.3rem 0;
-  font-size: 1rem;
+  margin: 0.25rem 0;
+  font-size: 14.5px;
+  color: #4a4a4a;
 }
 
 .g-footer {
-  padding: 2.25rem 0 2.75rem;
+  padding: 2rem 0 2.5rem;
   background: #fff;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  text-align: center;
 }
 
 .g-footer p {
-  font-size: 0.95rem;
-  color: var(--g-soft);
-  max-width: 40rem;
+  font-size: 13px;
+  color: #9a9a9a;
+  max-width: 36rem;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
-@media (max-width: 920px) {
-  .g-wrap {
-    width: min(1040px, calc(100% - 2.5rem));
+@media (max-width: 860px) {
+  .g-wrap,
+  .g-pairings .g-wrap {
+    width: min(920px, calc(100% - 2rem));
   }
 
   .g-split,
@@ -449,8 +497,9 @@
     grid-template-columns: 1fr;
   }
 
-  .g-art {
-    max-width: 380px;
+  .g-art,
+  .g-art-wide {
+    max-width: 320px;
     justify-self: center;
     order: -1;
   }
@@ -465,14 +514,14 @@
 
   .g-vibe-ring {
     grid-template-columns: 1fr;
-    row-gap: 1.1rem;
+    row-gap: 0.9rem;
     text-align: center;
   }
 
   .g-wheel {
     grid-column: 1;
     grid-row: auto;
-    margin: 0.25rem auto 0.75rem;
+    margin: 0.2rem auto 0.6rem;
   }
 
   .g-vibe-tl,
@@ -494,6 +543,10 @@
     max-width: none;
   }
 
+  .g-pairings-panel {
+    padding: 1.5rem 1.15rem;
+  }
+
   .g-pairings-panel h2,
   .g-pairings-lead {
     text-align: left;
@@ -501,5 +554,9 @@
 
   .g-hero {
     padding-top: 3rem;
+  }
+
+  .g-brand {
+    font-size: clamp(2.8rem, 12vw, 3.6rem);
   }
 }
