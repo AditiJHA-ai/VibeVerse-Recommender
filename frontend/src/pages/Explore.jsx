@@ -128,7 +128,7 @@ export default function Explore() {
         </p>
       </header>
 
-      <form className="search-panel" onSubmit={onSubmit}>
+      <form className="search-panel" id="search" onSubmit={onSubmit}>
         <div className="have-toggle" role="tablist" aria-label="What are you starting from?">
           <button
             type="button"

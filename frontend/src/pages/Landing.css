@@ -54,21 +54,21 @@
 }
 
 .g-wrap {
-  width: min(920px, calc(100% - 3.5rem));
+  width: min(1120px, calc(100% - 3rem));
   margin: 0 auto;
 }
 
 .g-section {
-  padding: 3.75rem 0;
+  padding: 4.5rem 0;
   background: #fff;
 }
 
 .g-section-tight {
-  padding: 2.75rem 0 3rem;
+  padding: 3.5rem 0 3.75rem;
 }
 
 .g-hero {
-  padding: 4.5rem 0 3.25rem;
+  padding: 5rem 0 4rem;
 }
 
 .g-band-blue {
@@ -103,53 +103,53 @@
 
 .g-split {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 2.75rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
   align-items: center;
 }
 
 .g-split-start {
   align-items: start;
-  gap: 2.5rem;
+  gap: 2.75rem;
 }
 
 .g-text-block {
-  max-width: 560px;
+  max-width: 720px;
 }
 
 .g-copy-short {
-  max-width: 22rem;
+  max-width: 26rem;
 }
 
 .g-copy-short p {
-  font-size: 14.5px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.75;
 }
 
 /* ---- Type scale ---- */
 .g-brand {
-  font-size: clamp(3.6rem, 7.5vw, 5rem);
-  line-height: 1.02;
+  font-size: clamp(4rem, 8vw, 5.75rem);
+  line-height: 1;
   font-weight: 500;
-  color: #555555;
-  margin-bottom: 1rem;
+  color: #4a4a4a;
+  margin-bottom: 1.15rem;
 }
 
 .g-lede {
-  max-width: 28rem;
-  margin-bottom: 1.35rem !important;
-  font-size: 14.5px;
-  color: #939393;
-  line-height: 1.7;
+  max-width: 30rem;
+  margin-bottom: 1.6rem !important;
+  font-size: 16px;
+  color: #7a7a7a;
+  line-height: 1.75;
   font-weight: 400;
 }
 
 .gamma h2 {
-  font-size: clamp(1.7rem, 3.2vw, 2.15rem);
-  line-height: 1.2;
+  font-size: clamp(2rem, 3.6vw, 2.55rem);
+  line-height: 1.18;
   font-weight: 500;
-  margin-bottom: 0.75rem;
-  color: #555555;
+  margin-bottom: 0.9rem;
+  color: #4a4a4a;
 }
 
 .g-subhead {
@@ -160,23 +160,27 @@
 }
 
 .g-intro {
-  max-width: 40rem;
-  margin-bottom: 1.75rem !important;
-  font-size: 14.5px;
+  max-width: 46rem;
+  margin-bottom: 2rem !important;
+  font-size: 16px;
   color: #6e6e6e;
+}
+
+.gamma p {
+  font-size: 16px;
 }
 
 .g-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.62rem 1.15rem;
-  border-radius: 0.55rem;
-  background: var(--g-rose);
-  color: #ffffff;
+  padding: 0.78rem 1.55rem;
+  border-radius: 999px;
+  background: #d8a8b0;
+  color: #4a4a4a;
   font-family: var(--g-sans);
-  font-weight: 600;
-  font-size: 13.5px;
+  font-weight: 700;
+  font-size: 15px;
   letter-spacing: 0.01em;
   border: none;
   box-shadow: none;
@@ -184,16 +188,16 @@
 }
 
 .g-btn:hover {
-  background: var(--g-rose-hover);
+  background: #c9959e;
   transform: translateY(-1px);
-  color: #fff;
+  color: #4a4a4a;
 }
 
 /* ---- Art ---- */
 .g-art {
   margin: 0;
   width: 100%;
-  max-width: 380px;
+  max-width: 520px;
   justify-self: end;
 }
 
@@ -201,13 +205,14 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 1.15rem;
+  border-radius: 1.5rem;
   display: block;
   background: #f4f6f9;
+  box-shadow: 0 18px 40px rgba(60, 80, 120, 0.1);
 }
 
 .g-art-wide {
-  max-width: 420px;
+  max-width: 540px;
 }
 
 .g-art-wide img {
@@ -216,11 +221,11 @@
 
 /* ---- Mode stack ---- */
 .g-mode-stack {
-  margin-top: 1.15rem;
+  margin-top: 1.35rem;
   background: var(--g-blush);
-  border-radius: 1rem;
+  border-radius: 1.15rem;
   overflow: hidden;
-  max-width: 29rem;
+  max-width: 34rem;
 }
 
 .g-mode-row {
@@ -293,20 +298,20 @@
 /* ---- Vibe ring ---- */
 .g-vibe-ring {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, 240px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px) minmax(0, 1fr);
   grid-template-rows: auto auto;
-  column-gap: 1.25rem;
-  row-gap: 1.75rem;
+  column-gap: 1.5rem;
+  row-gap: 2rem;
   align-items: center;
-  margin: 2rem auto 0;
-  max-width: 780px;
+  margin: 2.5rem auto 0;
+  max-width: 920px;
 }
 
 .g-wheel {
   grid-column: 2;
   grid-row: 1 / span 2;
   width: 100%;
-  max-width: 240px;
+  max-width: 300px;
   aspect-ratio: 1;
   object-fit: cover;
   justify-self: center;
@@ -376,7 +381,7 @@
 .g-pairings .g-wrap {
   position: relative;
   z-index: 1;
-  width: min(860px, calc(100% - 3.5rem));
+  width: min(980px, calc(100% - 3rem));
 }
 
 .g-pairings-panel {
@@ -487,7 +492,7 @@
 @media (max-width: 860px) {
   .g-wrap,
   .g-pairings .g-wrap {
-    width: min(920px, calc(100% - 2rem));
+    width: min(1120px, calc(100% - 1.5rem));
   }
 
   .g-split,
