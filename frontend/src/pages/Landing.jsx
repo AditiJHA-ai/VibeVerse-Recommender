@@ -1,15 +1,25 @@
 import { Link } from 'react-router-dom'
 import './Landing.css'
-import heroBooks from '../assets/gamma/hero-books.jpg'
-import twoQuestions from '../assets/gamma/two-questions.jpg'
 import vibeWheel from '../assets/gamma/vibe-wheel.jpg'
-import crossDomain from '../assets/gamma/cross-domain.jpg'
-import readyExplore from '../assets/gamma/ready-explore.jpg'
-import pairingsBg from '../assets/gamma/pairings-bg.jpg'
+
+/* Exact Ashrose / Gamma CDN assets from published site */
+const IMG = {
+  hero: 'https://imgproxy.gamma.app/resize/quality:80/resizing_type:fit/width:1200/https://cdn.gamma.app/qxfgnp3jvhixhio/generated-images/KAwJfmhV_3LGXd4sYW526.png',
+  twoQuestions:
+    'https://imgproxy.gamma.app/resize/quality:80/resizing_type:fit/width:1200/https://cdn.gamma.app/qxfgnp3jvhixhio/generated-images/Y-u1h5vu4whVKJE9mnulA.png',
+  crossDomain:
+    'https://imgproxy.gamma.app/resize/quality:80/resizing_type:fit/width:2000/https://cdn.gamma.app/qxfgnp3jvhixhio/generated-images/Av-I1O1R5nr-MFzhGLiLw.png',
+  pairingsBg:
+    'https://imgproxy.gamma.app/resize/quality:80/resizing_type:fit/width:2400/https://cdn.gamma.app/qxfgnp3jvhixhio/generated-images/RkIBkRSHhIFtITD8Ord_D.png',
+  readyExplore:
+    'https://imgproxy.gamma.app/resize/quality:80/resizing_type:fit/width:2000/https://cdn.gamma.app/qxfgnp3jvhixhio/generated-images/vBfZ089ZYAbh2-nPhYM71.png',
+}
 
 const PAIRINGS = [
   {
     title: 'The Great Gatsby',
+    have: 'book',
+    query: 'The Great Gatsby',
     body: (
       <>
         <strong>Book Vibe:</strong> Jazz-age glamour with melancholy undertones.{' '}
@@ -19,7 +29,9 @@ const PAIRINGS = [
     ),
   },
   {
-    title: 'Midnights by Taylor Swift',
+    title: 'Midnight by Taylor Swift',
+    have: 'song',
+    query: 'Midnights by Taylor Swift',
     body: (
       <>
         <strong>Song Vibe:</strong> Introspective late-night reflections layered with pop
@@ -30,6 +42,8 @@ const PAIRINGS = [
   },
   {
     title: 'Dune by Frank Herbert',
+    have: 'book',
+    query: 'Dune by Frank Herbert',
     body: (
       <>
         <strong>Book Vibe:</strong> Epic, expansive world-building with orchestral grandeur.{' '}
@@ -47,37 +61,49 @@ export default function Landing() {
         <div className="g-wrap g-split">
           <div className="g-copy">
             <h1 className="g-brand">VibeVerse</h1>
-            <p className="g-lede">
-              Discover the soundtrack to your favorite book. Find your next literary obsession
-              through music. VibeVerse bridges the gap between melodies and pages, revealing the
-              hidden connections between stories and songs.
+            <p className="g-lede g-lined">
+              <span className="g-line">
+                Discover the soundtrack to your favorite book. Find your next literary obsession
+              </span>
+              <span className="g-line">
+                through music. VibeVerse bridges the gap between melodies and pages, revealing
+              </span>
+              <span className="g-line">the hidden connections between stories and songs.</span>
             </p>
             <Link className="g-btn" to="/explore">
               Explore Vibes
             </Link>
           </div>
           <figure className="g-art">
-            <img src={heroBooks} alt="Floating books and musical notes" />
+            <img src={IMG.hero} alt="Floating books and musical notes" />
           </figure>
         </div>
       </section>
 
       <section className="g-section g-section-tight">
-        <div className="g-wrap g-text-block">
-          <h2>What&apos;s Your Vibe?</h2>
-          <p>
-            VibeVerse reimagines how we discover content by asking a delightfully simple question:{' '}
-            <strong>what if your favorite book had a soundtrack?</strong> What if that song you
-            love was actually a novel? By analyzing the emotional essence, mood, and atmosphere of
-            books and songs, VibeVerse uncovers surprising connections across media that traditional
-            recommendations miss.
-          </p>
+        <div className="g-wrap">
+          <div className="g-text-block">
+            <h2>What&apos;s Your Vibe?</h2>
+            <p className="g-lined">
+              <span className="g-line">
+                VibeVerse reimagines how we discover content by asking a delightfully simple
+                question: <strong>what if your favorite book had a soundtrack?</strong> What if
+              </span>
+              <span className="g-line">
+                that song you love was actually a novel? By analyzing the emotional essence, mood,
+                and atmosphere of books and songs, VibeVerse uncovers
+              </span>
+              <span className="g-line">
+                surprising connections across media that traditional recommendations miss.
+              </span>
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="g-section">
-        <div className="g-wrap g-split g-split-start">
-          <div className="g-copy">
+      <section className="g-section g-two-questions">
+        <div className="g-wrap g-two-q-layout">
+          <div className="g-two-q-copy">
             <h2>Two Questions, Infinite Possibilities</h2>
             <div className="g-mode-stack">
               <div className="g-mode-row">
@@ -106,8 +132,8 @@ export default function Landing() {
               </div>
             </div>
           </div>
-          <figure className="g-art">
-            <img src={twoQuestions} alt="Cosmic book with swirling musical notes" />
+          <figure className="g-art g-two-q-art">
+            <img src={IMG.twoQuestions} alt="Cosmic book with swirling musical notes" />
           </figure>
         </div>
       </section>
@@ -115,10 +141,12 @@ export default function Landing() {
       <section className="g-section g-band-blue" id="how">
         <div className="g-wrap">
           <h2>How the Magic Happens</h2>
-          <p className="g-intro">
-            VibeVerse uses sophisticated content analysis to understand the true character of every
-            book and song—not just genre tags, but the emotional landscape that makes each work
-            unique.
+          <p className="g-intro g-lined">
+            <span className="g-line">
+              VibeVerse uses sophisticated content analysis to understand the true character of
+              every book and song, not just genre tags, but the emotional
+            </span>
+            <span className="g-line">landscape that makes each work unique.</span>
           </p>
           <div className="g-steps">
             <article>
@@ -141,7 +169,7 @@ export default function Landing() {
               <div className="g-step-num">03</div>
               <h3>Surface Perfect Pairs</h3>
               <p>
-                Discover unexpected connections that feel surprisingly right—recommendations that
+                Discover unexpected connections that feel surprisingly right - recommendations that
                 make you say, &ldquo;I never thought of it that way!&rdquo;
               </p>
             </article>
@@ -149,37 +177,51 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="g-section">
+      <section className="g-section g-vibe-section">
         <div className="g-wrap">
           <h2>Vibe Categories</h2>
-          <p className="g-intro">
-            Every book and song lives somewhere on the VibeVerse spectrum. From cozy and
-            introspective to epic and exhilarating, we understand the full emotional range of
-            storytelling and music.
+          <p className="g-intro g-lined">
+            <span className="g-line">
+              Every book and song lives somewhere on the VibeVerse spectrum. From cozy and
+              introspective to epic and exhilarating, we understand the full
+            </span>
+            <span className="g-line">emotional range of storytelling and music.</span>
           </p>
           <div className="g-vibe-ring">
-            <div className="g-vibe-label g-vibe-tl">
-              <h3>Intimate</h3>
-              <p>Cozy, introspective, deeply personal connections</p>
-            </div>
-            <div className="g-vibe-label g-vibe-tr">
-              <h3>Electric</h3>
-              <p>Energetic, thrilling, adrenaline-pumping intensity</p>
+            <div className="g-vibe-side g-vibe-side-left">
+              <div className="g-vibe-label">
+                <h3>Intimate</h3>
+                <p>
+                  Cozy, introspective, deeply personal
+                  <br />
+                  connections
+                </p>
+              </div>
+              <div className="g-vibe-label">
+                <h3>Epic</h3>
+                <p>
+                  Grand, ambitious, sweeping and
+                  <br />
+                  transformative
+                </p>
+              </div>
             </div>
             <img className="g-wheel" src={vibeWheel} alt="Vibe category wheel" />
-            <div className="g-vibe-label g-vibe-bl">
-              <h3>Epic</h3>
-              <p>Grand, ambitious, sweeping and transformative</p>
-            </div>
-            <div className="g-vibe-label g-vibe-br">
-              <h3>Dreamy</h3>
-              <p>Ethereal, imaginative, wonderfully surreal</p>
+            <div className="g-vibe-side g-vibe-side-right">
+              <div className="g-vibe-label">
+                <h3>Electric</h3>
+                <p>Energetic, thrilling, adrenaline-pumping intensity</p>
+              </div>
+              <div className="g-vibe-label">
+                <h3>Dreamy</h3>
+                <p>Ethereal, imaginative, wonderfully surreal</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="g-section">
+      <section className="g-section g-cross-domain">
         <div className="g-wrap g-split">
           <div className="g-copy g-copy-short">
             <h2>Cross-Domain Discovery</h2>
@@ -190,13 +232,13 @@ export default function Landing() {
             </p>
           </div>
           <figure className="g-art g-art-wide">
-            <img src={crossDomain} alt="Futuristic library and music stage" />
+            <img src={IMG.crossDomain} alt="Futuristic library and music stage" />
           </figure>
         </div>
       </section>
 
       <section className="g-section g-pairings">
-        <div className="g-pairings-bg" style={{ backgroundImage: `url(${pairingsBg})` }} />
+        <div className="g-pairings-bg" style={{ backgroundImage: `url(${IMG.pairingsBg})` }} />
         <div className="g-wrap">
           <div className="g-pairings-panel">
             <h2>Try These Pairings</h2>
@@ -207,7 +249,13 @@ export default function Landing() {
             <div className="g-pairings-grid">
               {PAIRINGS.map((item) => (
                 <article key={item.title}>
-                  <h3>{item.title}</h3>
+                  <h3>
+                    <Link
+                      to={`/explore?q=${encodeURIComponent(item.query)}&have=${item.have}`}
+                    >
+                      {item.title}
+                    </Link>
+                  </h3>
                   <p>{item.body}</p>
                 </article>
               ))}
@@ -216,7 +264,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="g-section">
+      <section className="g-section g-reasons-section">
         <div className="g-wrap">
           <h2>Why Cross-Media Matters</h2>
           <div className="g-reasons">
@@ -233,7 +281,7 @@ export default function Landing() {
               <h3>Deepen Your Emotional Connection</h3>
               <p>
                 When a song captures exactly what a book made you feel, the experience becomes
-                richer. You&apos;re not just finding recommendations—you&apos;re uncovering kindred
+                richer. You&apos;re not just finding recommendations - you&apos;re uncovering kindred
                 spirits.
               </p>
             </article>
@@ -265,7 +313,7 @@ export default function Landing() {
             </ul>
           </div>
           <figure className="g-art g-art-wide">
-            <img src={readyExplore} alt="Person exploring recommendations on a phone" />
+            <img src={IMG.readyExplore} alt="Person exploring recommendations on a phone" />
           </figure>
         </div>
       </section>
@@ -275,6 +323,21 @@ export default function Landing() {
           <p>
             VibeVerse: Where every song has a story. Where every book has a soundtrack. Where
             discovery knows no boundaries.
+          </p>
+          <div className="g-footer-actions">
+            <Link className="g-btn g-btn-ghost" to="/explore">
+              Try VibeVerse →
+            </Link>
+          </div>
+          <p className="g-footer-credit">
+            Built by Aditi Jha ·{' '}
+            <a
+              href="https://github.com/AditiJHA-ai/VibeVerse-Recommender"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View on GitHub
+            </a>
           </p>
         </div>
       </footer>

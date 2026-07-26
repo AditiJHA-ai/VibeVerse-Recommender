@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Nav from '../components/Nav'
 
 const API = '/api'
@@ -34,6 +35,8 @@ function shorten(text, max = 720) {
 }
 
 export default function Explore() {
+  const [searchParams] = useSearchParams()
+  const bootstrapped = useRef(false)
   const [have, setHave] = useState('book')
   const [want, setWant] = useState('all')
   const [query, setQuery] = useState('')
@@ -60,6 +63,50 @@ export default function Explore() {
     }, 220)
     return () => clearTimeout(t)
   }, [query, have])
+
+  useEffect(() => {
+    if (bootstrapped.current) return
+    const q = (searchParams.get('q') || '').trim()
+    const haveParam = searchParams.get('have')
+    if (!q) return
+    bootstrapped.current = true
+    const nextHave = haveParam === 'song' || haveParam === 'book' ? haveParam : 'book'
+    setHave(nextHave)
+    setQuery(q)
+    // Defer so state above is visible; call recommend with explicit args.
+    ;(async () => {
+      setLoading(true)
+      setError('')
+      setResult(null)
+      try {
+        const res = await fetch(`${API}/recommend`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: q,
+            input_type: nextHave,
+            want: 'all',
+            top_n: 8,
+            allow_live: true,
+          }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          throw new Error(
+            typeof data.detail === 'string'
+              ? data.detail
+              : "We couldn't find that title. Try a fuller name.",
+          )
+        }
+        setResult(data)
+        setSuggestions([])
+      } catch (err) {
+        setError(err.message || 'Something went wrong')
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [searchParams])
 
   const books = useMemo(
     () => (result?.recommendations || []).filter((r) => r.type === 'book'),
@@ -117,9 +164,9 @@ export default function Explore() {
   const blurb = shorten(result?.description || '')
 
   return (
-    <div className="site-shell explore">
+    <div className="explore-page">
       <Nav />
-
+      <div className="site-shell explore">
       <header className="explore-hero">
         <h1>Find your vibe</h1>
         <p>
@@ -190,14 +237,16 @@ export default function Explore() {
                 }}
               >
                 {s.title}
-                {s.creator ? ` — ${s.creator}` : ''}
+                {s.creator ? ` - ${s.creator}` : ''}
               </button>
             ))}
           </div>
         )}
 
-        <fieldset className="want-fieldset">
-          <legend>What do you want recommendations for?</legend>
+        <div className="want-fieldset" role="group" aria-labelledby="want-label">
+          <p className="want-label" id="want-label">
+            What do you want recommendations for?
+          </p>
           <label className="radio">
             <input
               type="radio"
@@ -225,7 +274,7 @@ export default function Explore() {
             />
             Songs
           </label>
-        </fieldset>
+        </div>
       </form>
 
       {error && <p className="error">{error}</p>}
@@ -292,6 +341,7 @@ export default function Explore() {
           )}
         </>
       )}
+      </div>
     </div>
   )
 }

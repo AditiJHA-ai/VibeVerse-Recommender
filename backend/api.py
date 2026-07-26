@@ -17,6 +17,7 @@ from pydantic import BaseModel, Field
 
 from backend.enrichment import enrich
 from backend.recommender import get_recommender
+from backend.showcase import apply_showcase, match_showcase
 from backend.vibe_taxonomy import VIBES
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -144,6 +145,58 @@ def _query_matches_title(query: str, matched_title: str) -> bool:
     return qw.issubset(tw)
 
 
+def _ensure_media_balance(result: dict, rec, want: str, top_n: int) -> dict:
+    """When want=all, guarantee both book and song recommendations."""
+    if want != "all" or not result.get("found"):
+        return result
+
+    items = list(result.get("recommendations") or [])
+    songs = [x for x in items if x.get("type") == "song"]
+    books = [x for x in items if x.get("type") == "book"]
+    n_songs = max(4, (top_n + 1) // 2)
+    n_books = max(3, top_n // 2)
+
+    if len(songs) >= min(3, n_songs) and len(books) >= min(3, n_books):
+        result["recommendations"] = songs[:n_songs] + books[:n_books]
+        return result
+
+    from backend.discovery import vector_from_labels
+
+    labels = result.get("vibe_labels") or result.get("primary_vibe") or ""
+    tags = result.get("live_tags") or []
+    text = f"{result.get('matched_title', '')} {result.get('matched_creator', '')}"
+    qvec = vector_from_labels(labels, tags=tags, text=text)
+    matched_title = (result.get("matched_title") or "").strip().lower()
+
+    def _fill(existing: list[dict], item_type: str, need: int) -> list[dict]:
+        if len(existing) >= need:
+            return existing
+        seen = {
+            (str(x.get("title", "")).lower(), str(x.get("creator", "")).lower())
+            for x in existing
+        }
+        extras = rec.recommend_from_vector(qvec, target_type=item_type, top_n=need + 6)
+        for item in extras:
+            payload = item.__dict__ if hasattr(item, "__dict__") else item
+            title = str(payload.get("title") or "")
+            creator = str(payload.get("creator") or "")
+            key = (title.lower(), creator.lower())
+            if not title or key in seen:
+                continue
+            if title.strip().lower() == matched_title:
+                continue
+            existing.append(payload)
+            seen.add(key)
+            if len(existing) >= need:
+                break
+        return existing
+
+    songs = _fill(songs, "song", n_songs)
+    books = _fill(books, "book", n_books)
+    result["recommendations"] = songs[:n_songs] + books[:n_books]
+    return result
+
+
 async def _attach_live_discovery(result: dict, want: str, top_n: int) -> dict:
     """Blend modern Last.fm / Google Books picks into recommendations."""
     from backend.discovery import (
@@ -179,10 +232,10 @@ async def _attach_live_discovery(result: dict, want: str, top_n: int) -> dict:
         seen.add(key)
         merged.append(item)
 
-    # Keep type balance when want=all
+    # Keep type balance when want=all (both media, not one-sided)
     if want == "all":
-        songs = [x for x in merged if x.get("type") == "song"][:top_n]
-        books = [x for x in merged if x.get("type") == "book"][: max(2, top_n // 2)]
+        songs = [x for x in merged if x.get("type") == "song"][: max(4, (top_n + 1) // 2)]
+        books = [x for x in merged if x.get("type") == "book"][: max(3, top_n // 2)]
         merged = songs + books
     else:
         merged = [x for x in merged if x.get("type") == want][:top_n]
@@ -199,6 +252,10 @@ async def recommend(body: RecommendRequest):
 
     input_type = body.prefer or body.input_type
     want = body.target_type or body.want
+    showcase = match_showcase(body.query, input_type)
+    # Unambiguous landing pairings carry their own medium (e.g. Midnights → song).
+    if showcase:
+        input_type = showcase["input_type"]
 
     result = rec.recommend(
         body.query,
@@ -215,32 +272,57 @@ async def recommend(body: RecommendRequest):
     if result.get("found") and not _query_matches_title(body.query, result.get("matched_title") or ""):
         result = {"found": False, "query": body.query, "recommendations": []}
 
+    # Showcase seeds (Gatsby / Midnights / Dune) should not keep wrong catalog collisions
+    if showcase and result.get("found"):
+        reject = {t.lower() for t in showcase.get("reject_matched_titles") or ()}
+        matched = (result.get("matched_title") or "").strip().lower()
+        seed_title = showcase["seed"]["matched_title"].strip().lower()
+        if matched in reject or (matched and matched != seed_title and seed_title not in matched):
+            result = {"found": False, "query": body.query, "recommendations": []}
+
     if not result.get("found"):
-        if not body.allow_live:
-            raise HTTPException(status_code=404, detail="Title not in catalog")
-
-        live = await enrich(body.query, prefer=input_type)
-        if not live:
-            raise HTTPException(
-                status_code=404,
-                detail="Couldn't find that title. Try the full name and try again.",
+        # Curated landing pairings: seed from tags so both books and songs fill in.
+        if showcase:
+            seed = showcase["seed"]
+            tags = list(seed.get("tags") or [])
+            if not tags:
+                tags = [t.strip() for t in str(seed.get("vibe_labels") or "").split(",") if t.strip()]
+            result = rec.recommend_from_live_item(
+                title=seed["matched_title"],
+                creator=seed["matched_creator"],
+                item_type=seed["matched_type"],
+                tags=tags,
+                description=seed.get("description") or "",
+                target_type=want,
+                top_n=body.top_n,
             )
+            result["description"] = seed.get("description") or result.get("description") or ""
+            result["source"] = "showcase"
+        elif not body.allow_live:
+            raise HTTPException(status_code=404, detail="Title not in catalog")
+        else:
+            live = await enrich(body.query, prefer=input_type)
+            if not live:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Couldn't find that title. Try the full name and try again.",
+                )
 
-        result = rec.recommend_from_live_item(
-            title=live["title"],
-            creator=live["creator"],
-            item_type=live["type"],
-            tags=live.get("tags") or [],
-            description=live.get("description") or "",
-            target_type=want,
-            top_n=body.top_n,
-        )
-        result["description"] = (live.get("description") or "").strip()
-        result["thumbnail"] = live.get("thumbnail")
-        result["info_link"] = live.get("info_link") or live.get("url")
+            result = rec.recommend_from_live_item(
+                title=live["title"],
+                creator=live["creator"],
+                item_type=live["type"],
+                tags=live.get("tags") or [],
+                description=live.get("description") or "",
+                target_type=want,
+                top_n=body.top_n,
+            )
+            result["description"] = (live.get("description") or "").strip()
+            result["thumbnail"] = live.get("thumbnail")
+            result["info_link"] = live.get("info_link") or live.get("url")
 
     # If catalog hit has no blurb, fill metadata using the SAME title + artist/author
-    if result.get("found") and not result.get("description") and body.allow_live:
+    if result.get("found") and not result.get("description") and body.allow_live and not showcase:
         try:
             from backend.enrichment import lookup_book, lookup_song
 
@@ -277,6 +359,18 @@ async def recommend(body: RecommendRequest):
         result = await merge_affinity_into_recommendations(
             result, want=want, top_n=max(body.top_n, 10)
         )
+
+    # Keep landing-page claims true even after live blending.
+    result = apply_showcase(
+        result,
+        query=body.query,
+        input_type=input_type,
+        want=want,
+        top_n=max(body.top_n, 10),
+    )
+
+    # Final guarantee: All → both books and songs (unless user filtered).
+    result = _ensure_media_balance(result, rec, want=want, top_n=max(body.top_n, 10))
 
     result.pop("match_explanation", None)
     result.pop("discovery", None)

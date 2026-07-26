@@ -352,12 +352,15 @@ class VibeRecommender:
         if target_type == "all":
             opposite = "song" if row["type"] == "book" else "book"
             cross = self.recommend_from_vector(
-                query_vec, target_type=opposite, top_n=top_n, exclude_idx=idx
+                query_vec,
+                target_type=opposite,
+                top_n=max(4, (top_n + 1) // 2),
+                exclude_idx=idx,
             )
             same = self.recommend_from_vector(
                 query_vec,
                 target_type=row["type"],
-                top_n=max(2, top_n // 2),
+                top_n=max(3, top_n // 2),
                 exclude_idx=idx,
             )
             recs = cross + same
@@ -398,9 +401,11 @@ class VibeRecommender:
 
         if target_type == "all":
             opposite = "song" if item_type == "book" else "book"
-            recs = self.recommend_from_vector(vec, target_type=opposite, top_n=top_n)
+            recs = self.recommend_from_vector(
+                vec, target_type=opposite, top_n=max(4, (top_n + 1) // 2)
+            )
             recs += self.recommend_from_vector(
-                vec, target_type=item_type, top_n=max(2, top_n // 2)
+                vec, target_type=item_type, top_n=max(3, top_n // 2)
             )
         else:
             recs = self.recommend_from_vector(vec, target_type=target_type, top_n=top_n)

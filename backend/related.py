@@ -510,7 +510,7 @@ async def merge_affinity_into_recommendations(result: dict[str, Any], want: str,
         songs = _blend_balanced(
             affinity,
             existing,
-            top_n=top_n,
+            top_n=max(4, (top_n + 1) // 2),
             anchor_creator=anchor,
             matched_title=title,
             item_type="song",
