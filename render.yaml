@@ -3,6 +3,7 @@ services:
     name: vibeverse
     runtime: docker
     plan: free
+    region: oregon
     healthCheckPath: /api/health
     envVars:
       - key: HOST

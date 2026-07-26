@@ -1,15 +1,3 @@
----
-title: VibeVerse
-emoji: 📚
-colorFrom: pink
-colorTo: blue
-sdk: docker
-app_port: 7860
-pinned: false
-license: mit
-short_description: Book ↔ song recommender by emotional vibe
----
-
 # VibeVerse
 
 Cross-domain recommender: match books and songs by shared emotional vibe - one site, landing page + explore page.
@@ -77,25 +65,19 @@ python -m backend.expand_catalog --per-tag 20 --max-new 600
 
 This pulls Last.fm top tracks for vibe/genre tags, merges them into `main_dataframe.pkl`, and rebuilds `data/`.
 
-## Deploy (free - Hugging Face Spaces)
+## Deploy (free - Render Free instance)
 
-No Railway/Render trial needed. Hugging Face Spaces is free for public apps.
+Hugging Face Docker Spaces are paid now. Use **Render Free** instead (ongoing free plan, not a paid trial):
 
-1. Create a free account: https://huggingface.co/join
-2. Create a **Docker** Space named `VibeVerse` (SDK: Docker, port `7860`)
-3. In Space **Settings → Secrets**, add:
+1. Sign up / log in: https://dashboard.render.com/register  
+2. **New → Blueprint** and connect `AditiJHA-ai/VibeVerse-Recommender`  
+   (or **New → Web Service** → this GitHub repo → Runtime: **Docker** → Instance: **Free**)
+3. Add environment variables:
    - `GOOGLE_BOOKS_API_KEY`
    - `LASTFM_API_KEY`
-4. Push this repo to the Space (or connect GitHub):
+4. Deploy. URL will look like: `https://vibeverse.onrender.com`
 
-```bash
-hf auth login
-hf upload YOUR_HF_USERNAME/VibeVerse . --repo-type=space
-```
-
-Your live URL will be: `https://YOUR_HF_USERNAME-VibeVerse.hf.space`
-
-Cold starts after idle are normal on the free tier (first load can take ~30–60s).
+Free instances sleep after ~15 minutes idle; first request can take ~1 minute to wake.
 
 ## Legacy
 
