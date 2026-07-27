@@ -44,11 +44,13 @@ body,
 #root {
   min-height: 100%;
   margin: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body {
   background: #ffffff;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 html:has(.explore-page),
@@ -68,9 +70,11 @@ body:has(.explore-page),
 .explore-page {
   min-height: 100vh;
   width: 100%;
+  max-width: 100%;
   position: relative;
   z-index: 1;
   background: transparent;
+  overflow-x: clip;
 }
 
 /* ---- Dreamy atmosphere ---- */
@@ -167,9 +171,11 @@ img {
 
 .site-shell {
   width: min(1120px, calc(100% - 2.5rem));
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .site-shell.explore {
@@ -658,6 +664,10 @@ img {
   cursor: pointer;
   font-weight: 500;
   transition: all 0.25s ease;
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
 }
 
 .have-toggle button.active {
@@ -681,7 +691,7 @@ img {
 }
 
 .search-row.single {
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
 }
 
 .search-row input,
@@ -692,6 +702,10 @@ img {
   border-radius: 1rem;
   padding: 0.95rem 1.1rem;
   outline: none;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -967,15 +981,89 @@ img {
 }
 
 @media (max-width: 860px) {
+  .site-shell {
+    width: min(1120px, calc(100% - 1.5rem));
+    padding-bottom: 2rem;
+  }
+
+  .nav,
+  .nav-inner {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .nav-inner {
+    width: min(1120px, calc(100% - 1.5rem));
+  }
+
+  .explore-hero {
+    padding: 1.5rem 0 1rem;
+  }
+
+  .explore-hero h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+
+  .explore-hero p {
+    font-size: 0.95rem;
+    max-width: none;
+  }
+
+  .search-panel {
+    margin: 1rem 0 1.5rem;
+    padding: 0;
+  }
+
+  .have-toggle {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .have-toggle button {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+  }
+
   .vibe-grid,
   .steps,
   .rec-grid,
   .pairing,
   .search-row,
+  .search-row.single,
   .two-col,
   .reasons,
   .meta-row {
     grid-template-columns: 1fr;
+  }
+
+  .search-row,
+  .search-row.single {
+    gap: 0.65rem;
+  }
+
+  .search-row .btn,
+  .search-row .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .want-fieldset {
+    gap: 0.75rem 1rem;
+  }
+
+  .want-label {
+    font-size: 0.95rem;
+  }
+
+  .meta-banner {
+    padding: 1.1rem 1.15rem;
+  }
+
+  .meta-row {
+    display: grid;
+    gap: 0.85rem;
   }
 
   .nav-links a:not(.nav-cta) {
@@ -985,6 +1073,20 @@ img {
   .atmosphere .orb {
     filter: blur(40px);
     opacity: 0.4;
+  }
+}
+
+@media (max-width: 480px) {
+  .have-toggle {
+    grid-template-columns: 1fr;
+  }
+
+  .explore-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .brand {
+    font-size: 1.4rem;
   }
 }
 

@@ -290,7 +290,13 @@
 
 .g-line {
   display: block;
-  white-space: nowrap;
+  white-space: normal;
+}
+
+@media (min-width: 861px) {
+  .g-line {
+    white-space: nowrap;
+  }
 }
 
 .g-text-block .g-lined {
