@@ -798,8 +798,20 @@
 }
 
 @media (max-width: 860px) {
-  .g-line {
+  .gamma {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  .g-line,
+  .g-pairings-lead,
+  .g-vibe-side-right .g-vibe-label p {
     white-space: normal;
+  }
+
+  .g-pairings-lead {
+    width: auto;
+    max-width: 100%;
   }
 
   .g-lede,
@@ -814,7 +826,7 @@
 
   .g-wrap,
   .g-pairings .g-wrap {
-    width: min(1120px, calc(100% - 2rem));
+    width: min(1120px, calc(100% - 1.5rem));
   }
 
   .g-section,
